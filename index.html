@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>duongquocdat</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        .background {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            transform: translate(-50%, -50%) scale(1.2);
+            filter: blur(1px);
+            z-index: -1;
+            background: #000;
+            animation: pulse 10s ease-in-out infinite;
+        }
+
+        .logo {
+            position: fixed;
+            top: 25%;
+            left: 54%;
+            transform: translate(-50%, -50%);
+            width: auto;
+            max-width: 850px;
+            max-height: 840px;
+            z-index: 1;
+            animation: fadeIn 1.5s ease forwards;
+        }
+
+        .main-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #fff;
+            z-index: 2;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, #fff, #a0a0a0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideUp 1s ease forwards;
+        }
+
+        p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+            max-width: 500px;
+            color: #e0e0e0;
+            line-height: 1.5;
+            animation: slideUp 1s ease forwards 0.2s;
+            opacity: 0;
+        }
+
+        .links a {
+            display: inline-block;
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 10px 25px;
+            text-decoration: none;
+            background: linear-gradient(45deg,#0a2d79, #07a2fc, #ffffff, #075af5);
+            color: #fff;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            animation: fadeIn 1s ease forwards 0.4s;
+            opacity: 0;
+        }
+
+        .links a:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 0 18px rgba(255, 255, 255, 0.6);
+            background: linear-gradient(45deg, #0a2d79, #07a2fc, #ffffff, #075af5);
+        }
+
+        .show-more-btn {
+            position: fixed;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 10px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 2;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            animation: fadeIn 1s ease forwards 0.6s;
+            opacity: 0;
+        }
+
+        .show-more-btn:hover {
+            background: #e0e0e0;
+            transform: translateX(-50%) scale(1.05) translateY(-2px);
+            box-shadow: 0 0 18px rgba(255, 255, 255, 0.6);
+        }
+
+        .copyright {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: #b0b0b0;
+            z-index: 2;
+            animation: fadeIn 1s ease forwards 0.8s;
+            opacity: 0;
+        }
+
+        .avatar-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0);
+            z-index: 3;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: background 0.5s ease;
+        }
+
+        .avatar-container.show {
+            display: flex;
+            background: rgba(0, 0, 0, 0.85);
+        }
+
+        .avatar-content {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            max-width: 650px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            opacity: 0;
+            transform: scale(0.9) translateY(40px);
+            transition: all 0.5s ease;
+        }
+
+        .avatar-container.show .avatar-content {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        .popup-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(15px);
+            z-index: -1;
+        }
+
+        .popup-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        .avatar {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .avatar img {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            object-position: center;
+            animation: fadeIn 1s ease forwards 0.2s;
+            opacity: 0;
+        }
+
+        .info-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .info-area h2 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1s ease forwards 0.4s;
+            opacity: 0;
+        }
+
+        .info-area p {
+            font-size: 0.95rem;
+            font-weight: 400;
+            color: #fff;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+            line-height: 1.6;
+            margin-bottom: 15px;
+            animation: fadeIn 1s ease forwards 0.6s;
+            opacity: 0;
+        }
+
+        .info-area .links a {
+            font-size: 0.9rem;
+            padding: 8px 20px;
+            border: 2px solid #fff;
+            background: linear-gradient(45deg,#0a2d79, #07a2fc, #ffffff, #075af5);
+            color: #fff;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+            animation: fadeIn 1s ease forwards 0.8s;
+            opacity: 0;
+        }
+
+        .info-area .links a:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            background: linear-gradient(45deg, #0a2d79, #07a2fc, #ffffff, #075af5);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #000;
+            color: #fff;
+            border: none;
+            padding: 6px 14px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #333;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1.2); }
+            50% { transform: translate(-50%, -50%) scale(1.25); }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.3rem; }
+            p, .links a, .show-more-btn { font-size: 0.95rem; }
+            .logo { max-width: 420px; top: 15%; }
+            .avatar-content { padding: 20px; }
+            .avatar img { width: 120px; height: 120px; }
+            .copyright { font-size: 0.7rem; }
+            .show-more-btn { bottom: 60px; padding: 10px 25px; }
+            .info-area h2 { font-size: 1.5rem; }
+            .info-area p { font-size: 0.9rem; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.8rem; }
+            p, .links a, .show-more-btn { font-size: 0.85rem; }
+            .logo { max-width: 320px; }
+            .avatar img { width: 100px; height: 100px; }
+            .copyright { font-size: 0.65rem; }
+            .show-more-btn { bottom: 50px; padding: 8px 20px; }
+            .info-area h2 { font-size: 1.3rem; }
+            .info-area p { font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+    <img class="background" src="background.png" alt="Background" onerror="console.error('Lỗi: Không thể tải background.png Kiểm tra tệp trong thư mục gốc.')">
+
+    <img class="logo" src="logo.png" alt="Biểu tượng duongquocdat">
+
+    <div class="main-container">
+        <h1>Welcome to duongquocdat's website</h1>
+        <p>Personal social networking site:</p>
+        <div class="links">
+            <a href="https://www.facebook.com/duong.quoc.at.492403" target="_blank">Facebook</a>
+        </div>
+    </div>
+
+    <button class="show-more-btn" onclick="toggleAvatar()">Thông tin cá nhân</button>
+
+    <div class="copyright">
+        © Edited by dieannam 25/5/2025 - All rights reserved.
+    </div>
+
+    <div class="avatar-container">
+        <div class="avatar-content">
+            <img class="popup-background" src="popup_bg.png" alt="Popup Background">
+            <div class="popup-overlay"></div>
+            <button class="close-btn" onclick="toggleAvatar()">Đóng</button>
+            <div class="avatar">
+                <img src="avatar.jpg" alt="duongquocdat">
+            </div>
+            <div class="info-area">
+                <h2>Thông tin cá nhân</h2>
+                <p>Dương Quốc Đạt - 0201, cảm ơn vì đã xem !!!</p>
+                <div class="links">
+                    <a href="https://www.facebook.com/duong.quoc.at.492403" target="_blank">Facebook</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleAvatar() {
+            const avatarContainer = document.querySelector('.avatar-container');
+            if (!avatarContainer.classList.contains('show')) {
+                avatarContainer.style.display = 'flex';
+                setTimeout(() => avatarContainer.classList.add('show'), 10);
+            } else {
+                avatarContainer.classList.remove('show');
+                setTimeout(() => avatarContainer.style.display = 'none', 500);
+            }
+        }
+    </script>
+</body>
+</html>
